@@ -1,47 +1,73 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Formulario</title>
+    <link rel="stylesheet" href="{{ asset('css/formulario.css') }}">
+</head>
+<body>
 
-    <form method="POST" action="{{ route('login') }}">
+    <form class="form" method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <!-- Email -->
+        <div class="flex-column">
+            <label>Email</label>
         </div>
+        <div class="inputForm">
+            <!-- Ícono SVG -->
+            <!-- (Puedes dejarlo igual) -->
+            <input placeholder="Enter your Email" class="input" type="email" name="email" :value="old('email')" required autofocus>
+        </div>
+        @if($errors->has('email'))
+            <span style="color:red; font-size:12px;">{{ $errors->first('email') }}</span>
+        @endif
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="flex-column">
+            <label>Password</label>
         </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
+        <div class="inputForm">
+            <!-- Ícono SVG -->
+            <input placeholder="Enter your Password" class="input" type="password" name="password" required>
         </div>
+        @if($errors->has('password'))
+            <span style="color:red; font-size:12px;">{{ $errors->first('password') }}</span>
+        @endif
 
-        <div class="flex items-center justify-end mt-4">
+        <!-- Remember me y Forgot password -->
+        <div class="flex-row">
+            <div>
+                <input type="checkbox" id="remember_me" name="remember">
+                <label for="remember_me">Remember me</label>
+            </div>
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
+                <a class="span" href="{{ route('password.request') }}">Forgot password?</a>
             @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
         </div>
+
+        <!-- Botón Login -->
+        <button type="submit" class="button-submit">Sign In</button>
+
+        <p class="p">
+          Don't have an account?
+          <a href="{{ route('register') }}" class="span">Sign Up</a>
+        </p>
+        <p class="p line">Or With</p>
+
+        <!-- Botón Google -->
+        <div style="display: flex; justify-content: center;">
+          <button type="button" class="btn google" onclick="window.location='{{ route('auth.google') }}'">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" width="20" alt="Google">
+              Continuar con Google
+          </button>
+        </div>
+
+        <!-- Mensaje aclaratorio -->
+        <p style="font-size: 13px; text-align: center; margin-top: 10px;">
+          Al continuar con Google, se registrará automáticamente si aún no tiene una cuenta.
+        </p>
     </form>
-</x-guest-layout>
+
+</body>
+</html>

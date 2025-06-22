@@ -183,17 +183,7 @@
     <div class="container-fluid mt-4">
         <div class="row">
             <!-- Si el usuario no está autenticado, muestra el cuadro de bienvenida -->
-            @guest
-            <div class="col-12 welcome-box">
-                <h2>Bienvenido a DECOR CENTER</h2>
-                <p>Sistema de Inventario</p>
-                <!-- Botones de autenticación -->
-                <div class="auth-buttons">
-                    <a href="{{ route('login') }}" class="btn btn-primary btn-lg">Iniciar sesión</a>
-                    <a href="{{ route('register') }}" class="btn btn-success btn-lg">Crear cuenta</a>
-                </div>
-            </div>
-            @endguest
+            @include('components.welcome-box')
 
             <!-- Contenido de la página para usuarios logueados -->
             @auth

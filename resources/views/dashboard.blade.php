@@ -59,6 +59,20 @@
     }
 </style>
 
+<!-- Barra superior -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 shadow-sm">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+        <span class="navbar-brand fw-bold">📦 Panel de Inventario</span>
+
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="btn btn-danger btn-sm rounded-pill shadow-sm">
+                <i class="fas fa-sign-out-alt me-1"></i> Cerrar sesión
+            </button>
+        </form>
+    </div>
+</nav>
+
 <div class="container mt-5">
     <div class="row gx-4">
         <!-- Columna lateral -->

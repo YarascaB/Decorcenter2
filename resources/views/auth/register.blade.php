@@ -1,52 +1,91 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Registro</title>
+    <link rel="stylesheet" href="{{ asset('css/formulario.css') }}">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+
+    <form class="form" method="POST" action="{{ route('register') }}">
         @csrf
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+        <!-- Nombre -->
+        <div class="flex-column">
+            <label>Name</label>
         </div>
+        <div class="inputForm">
+            <input placeholder="Enter your name" class="input" type="text" name="name" value="{{ old('name') }}" required autofocus>
+        </div>
+        @if($errors->has('name'))
+            <span style="color:red; font-size:12px;">{{ $errors->first('name') }}</span>
+        @endif
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <!-- Email -->
+        <div class="flex-column">
+            <label>Email</label>
         </div>
+        <div class="inputForm">
+            <input placeholder="Enter your Email" class="input" type="email" name="email" value="{{ old('email') }}" required>
+        </div>
+        @if($errors->has('email'))
+            <span style="color:red; font-size:12px;">{{ $errors->first('email') }}</span>
+        @endif
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+        <div class="flex-column">
+            <label>Password</label>
         </div>
+        <div class="inputForm">
+            <input placeholder="Enter your Password" class="input" type="password" name="password" required>
+        </div>
+        @if($errors->has('password'))
+            <span style="color:red; font-size:12px;">{{ $errors->first('password') }}</span>
+        @endif
 
         <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
+        <div class="flex-column">
+            <label>Confirm Password</label>
+        </div>
+        <div class="inputForm">
+            <input placeholder="Confirm your Password" class="input" type="password" name="password_confirmation" required>
+        </div>
+        @if($errors->has('password_confirmation'))
+            <span style="color:red; font-size:12px;">{{ $errors->first('password_confirmation') }}</span>
+        @endif
 
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
+        <!-- Botón registrar -->
+        <button type="submit" class="button-submit">Register</button>
 
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
+        <!-- Ya tienes cuenta -->
+        <p class="p">Already registered? <a href="{{ route('login') }}" class="span">Log in</a></p>
+
+        <!-- Línea divisora -->
+        <p class="p line">Or Register With</p>
+
+        <!-- Botón Google -->
+        <div style="display: flex; justify-content: center;">
+            <button type="button" class="btn google" onclick="window.location='{{ route('auth.google') }}'">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png" width="20" alt="Google">
+                Continuar con Google
+            </button>
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
+        <!-- Mensaje aclaratorio -->
+        <p style="font-size: 13px; text-align: center; margin-top: 10px;">
+            Al continuar con Google, se registrará automáticamente si aún no tiene una cuenta.
+</p>
     </form>
-</x-guest-layout>
+</body>
+</html>

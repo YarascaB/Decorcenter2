@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\RegisteredUserController; 
@@ -11,11 +12,18 @@ use App\Http\Controllers\VentaController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\Auth\GoogleController;
 
 // Ruta principal de la aplicación
 Route::get('/', function () {
     return view('home');
 })->name('home');
+
+
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');
 
 // Rutas de autenticación
 Route::get('/login', [AuthenticatedSessionController::class, 'create'])->name('login');
@@ -67,6 +75,10 @@ Route::post('/ventas', [VentaController::class, 'procesar'])->name('ventas.proce
 
 Route::get('/clientes/crear', [ClienteController::class, 'crear'])->name('clientes.crear');
 Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.store');
+
+
+Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('auth.google');
+Route::get('/auth/google/callback', [GoogleController::class, 'callback']);
 
 
 // Cargar las rutas de autenticación generadas por Breeze u otra configuración
