@@ -165,9 +165,11 @@
                     <a class="nav-link" href="{{ route('dashboard') }}">Inicio</a>
                     @if(Auth::check())
                         <a class="nav-link" href="{{ route('profile.edit') }}">Perfil</a>
-                        <form action="{{ route('logout') }}" method="POST" style="display:inline;">
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
                             @csrf
-                            <button type="submit" class="nav-link btn btn-link text-white">Salir</button>
+                            <button type="submit" class="btn btn-danger ms-2 px-3 rounded-pill shadow-sm">
+                                <i class="fas fa-sign-out-alt me-1"></i> Cerrar sesión
+                            </button>
                         </form>
                     @else
                         <a class="nav-link" href="{{ route('login') }}">Iniciar sesión</a>
