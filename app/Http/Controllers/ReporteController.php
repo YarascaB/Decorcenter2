@@ -81,4 +81,18 @@ class ReporteController extends Controller
         return view('reportes.usuarios_registrados', compact('usuarios', 'roles'));
     }
 
+    public function apiProductosMasVendidos()
+    {
+        $productos = DB::table('productos as p')
+            ->join('detalle_ventas as dv', 'p.id', '=', 'dv.producto_id')
+            ->select('p.name', DB::raw('SUM(dv.cantidad) as total_vendido'))
+            ->groupBy('p.name')
+            ->orderByDesc('total_vendido')
+            ->limit(10)
+            ->get();
+
+        return response()->json($productos);
+    }
+
+
 }

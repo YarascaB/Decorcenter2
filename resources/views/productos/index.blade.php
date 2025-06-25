@@ -4,104 +4,147 @@
 
 @section('content')
 <style>
-    table {
-        width: 100%;
-        margin-top: 20px;
-        border-collapse: collapse;
+    body {
+        background: linear-gradient(to right, #f0f2f5, #eaf4fc);
     }
 
-    th, td {
-        padding: 8px 12px;
-        border: 1px solid #ddd;
+    h1 {
         text-align: center;
-    }
-
-    th {
-        background-color: #34495e;
-        color: white;
-    }
-
-    .btn-agregar, .btn-regresar, .btn-salir {
-        margin-top: 10px;
-        padding: 10px 20px;
-        color: white;
-        border: none;
-        border-radius: 5px;
+        margin-bottom: 30px;
         font-weight: bold;
-        cursor: pointer;
+        color: #2c3e50;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        font-weight: 600;
+        border-radius: 6px;
         text-decoration: none;
         display: inline-block;
-        text-align: center;
+        transition: all 0.3s ease;
+        color: white;
+        border: none;
     }
 
     .btn-agregar {
-        background-color: #27ae60;
+        background: linear-gradient(to right, #1abc9c, #16a085);
     }
 
     .btn-agregar:hover {
-        background-color: #2ecc71;
+        background: linear-gradient(to right, #48c9b0, #1abc9c);
+        transform: scale(1.05);
+    }
+
+    .btn-vender {
+        background: linear-gradient(to right, #f39c12, #e67e22);
+        margin-top: 5px;
+    }
+
+    .btn-vender:hover {
+        background: linear-gradient(to right, #f1c40f, #f39c12);
+        transform: scale(1.05);
     }
 
     .btn-regresar {
-        background-color: #2980b9;
+        background: linear-gradient(to right, #3498db, #2980b9);
     }
 
     .btn-regresar:hover {
-        background-color: #3498db;
+        background: linear-gradient(to right, #5dade2, #3498db);
     }
 
     .btn-salir {
-        background-color: #c0392b;
+        background: linear-gradient(to right, #e74c3c, #c0392b);
     }
 
     .btn-salir:hover {
-        background-color: #e74c3c;
+        background: linear-gradient(to right, #ec7063, #e74c3c);
     }
 
     .botones-navegacion {
-        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 15px;
+    }
+
+    th {
+        background-color: #2c3e50;
+        color: white;
+        padding: 12px;
+        text-align: center;
+    }
+
+    td {
+        padding: 10px;
+        text-align: center;
+        vertical-align: middle;
+        border-bottom: 1px solid #ddd;
+    }
+
+    tbody tr:hover {
+        background-color: #f2f2f2;
+        transition: background-color 0.2s ease;
     }
 </style>
 
-<h1>Lista de Productos</h1>
+<div class="container mt-4">
+    <h1>📦 Lista de Productos</h1>
 
-@role('admin|editor')
-<a href="{{ route('productos.create') }}" class="btn-agregar">Agregar Producto</a>
-@endrole
+    @role('admin|editor')
+    <div class="mb-3 text-center">
+        <a href="{{ route('productos.create') }}" class="btn btn-agregar">➕ Agregar Producto</a>
+    </div>
+    @endrole
 
-<table>
-    <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Stock</th>
-            <th>Precio</th>
-            <th>Descripción</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($productos as $producto)
-            <tr>
-                <td>{{ strtoupper($producto->name) }}</td>
-                <td>{{ $producto->category }}</td>
-                <td>{{ $producto->stock }}</td>
-                <td>${{ number_format($producto->price, 2) }}</td>
-                <td>{{ $producto->description }}</td>
-                <td>
-                    @role('admin|vendedor')
-                    <a href="{{ route('productos.vender.form', $producto->id) }}" class="btn-agregar" style="background-color: #f39c12;">
-                        Vender
-                    </a>
-                    @endrole
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
-</table>
+    <div class="table-wrapper mb-4">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Stock</th>
+                    <th>Precio</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($productos as $producto)
+                    <tr>
+                        <td>{{ strtoupper($producto->name) }}</td>
+                        <td>{{ $producto->category }}</td>
+                        <td>{{ $producto->stock }}</td>
+                        <td>${{ number_format($producto->price, 2) }}</td>
+                        <td>{{ $producto->description }}</td>
+                        <td>
+                            @role('admin|vendedor')
+                            <a href="{{ route('ventas.crear', $producto->id) }}" class="btn btn-vender">🛒 Vender</a>
+                            @endrole
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
-<div class="botones-navegacion">
-    <a href="{{ url()->previous() }}" class="btn-regresar">Regresar</a>
-    <a href="{{ route('home') }}" class="btn-salir">Salir</a>
+    <div class="botones-navegacion">
+        <a href="{{ url()->previous() }}" class="btn btn-regresar">⬅️ Regresar</a>
+        <a href="{{ route('home') }}" class="btn btn-salir">🏠 Salir</a>
+    </div>
 </div>
 @endsection

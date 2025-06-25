@@ -1,157 +1,190 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@yield('title')</title>
-    <!-- Agregar Bootstrap para diseño responsivo -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- FontAwesome para iconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
-        /* Estilos generales del body */
+        /* Fuentes y colores */
         body {
-            background-color: #f4f6f9;
-            font-family: 'Arial', sans-serif;
+            background: #f9fafb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            color: #34495e;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Barra de navegación superior */
+        /* Navbar */
         .navbar {
-            background-color: #2c3e50;
+            background: linear-gradient(90deg, #1d3557 0%, #457b9d 100%);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            padding: 0.75rem 1.5rem;
         }
-
         .navbar-brand {
-            color: #ecf0f1 !important;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #f1faee !important;
+            letter-spacing: 1px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
-
         .nav-link {
-            color: #ecf0f1 !important;
+            color: #a8dadc !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
         }
-
         .nav-link:hover {
-            color: #3498db !important;
+            color: #ffb703 !important;
+            text-decoration: underline;
+        }
+        #toggleSidebar {
+            background: transparent;
+            border: none;
+            color: #f1faee;
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 1100;
+        }
+        #toggleSidebar:hover {
+            color: #ffb703;
         }
 
-        /* Barra lateral */
+        /* Sidebar */
         .sidebar {
-            background-color: #34495e;
-            color: white;
+            background: #264653;
+            color: #e9ecef;
             height: 100vh;
-            padding: 20px;
-            border-radius: 8px;
+            width: 260px;
+            padding: 2rem 1.5rem;
             position: fixed;
             top: 0;
-            bottom: 0;
             left: 0;
-            width: 250px;
-            transition: width 0.3s ease;
+            overflow-y: auto;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+            border-top-right-radius: 15px;
+            border-bottom-right-radius: 15px;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
-            z-index: 1040;
-        }
-
-        .sidebar a {
-            color: white;
-            display: block;
-            margin: 10px 0;
-            text-decoration: none;
-            font-size: 16px;
-        }
-
-        .sidebar a:hover {
-            background-color: #2980b9;
-            border-radius: 5px;
-            padding: 10px;
-        }
-
-        #toggleSidebar {
-            background: none;
-            border: none;
-            color: #ecf0f1;
-            font-size: 1.5rem;
-            margin-right: 15px;
-            transition: color 0.3s;
-            z-index: 1051;
-        }
-
-        #toggleSidebar:hover {
-            color: #3498db;
-        }
-
-        @media (max-width: 768px) {
-            #toggleSidebar {
-                font-size: 1.3rem;
-                margin-right: 10px;
-            }
+            z-index: 1050;
         }
         body.sidebar-visible .sidebar {
             transform: translateX(0);
         }
-        body.sidebar-visible .content {
-            padding-left: 270px;
+
+        .sidebar h4 {
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #f1faee;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+        .sidebar a {
+            display: block;
+            color: #a8dadc;
+            padding: 10px 15px;
+            margin-bottom: 0.75rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            box-shadow: inset 0 0 0 0 #ffb703;
+            text-decoration: none;
+        }
+        .sidebar a:hover,
+        .sidebar a:focus {
+            background-color: #ffb703;
+            color: #264653;
+            box-shadow: inset 0 0 10px 5px #ffb703;
+            text-decoration: none;
+        }
+        .sidebar .btn {
+            width: 100%;
+            font-weight: 600;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(255, 183, 3, 0.5);
+            transition: box-shadow 0.3s ease;
+        }
+        .sidebar .btn:hover {
+            box-shadow: 0 0 15px 4px #ffb703;
         }
 
-        /* Contenido principal */
+        /* Contenido */
         .content {
-            margin-left: 0px; /* Deja espacio para la barra lateral */
-            padding: 20px;
+            margin-left: 0;
+            padding: 2rem 2rem 4rem;
+            flex-grow: 1;
             transition: margin-left 0.3s ease;
         }
+        body.sidebar-visible .content {
+            margin-left: 260px;
+        }
 
-        /* Pie de página */
+        /* Footer */
         .footer {
-            background-color: #2c3e50;
-            color: white;
+            background: linear-gradient(90deg, #1d3557 0%, #457b9d 100%);
+            color: #f1faee;
             text-align: center;
-            padding: 10px;
+            padding: 12px 1rem;
             position: fixed;
             bottom: 0;
             width: 100%;
-        }
-
-        /* Navbar en dispositivos pequeños */
-        .navbar-nav .nav-link {
-            margin-left: 20px;
+            font-weight: 500;
+            box-shadow: 0 -3px 8px rgba(0,0,0,0.15);
+            z-index: 1000;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
         }
 
         /* Ajustes responsivos */
         @media (max-width: 768px) {
             .sidebar {
-                position: relative;
-                height: auto;
-                margin-bottom: 20px;
-                width: 100%;
+                position: fixed;
+                width: 220px;
+                height: 100vh;
+                border-radius: 0 15px 15px 0;
             }
-
-            .content {
+            body.sidebar-visible .content {
                 margin-left: 0;
             }
-
-            .welcome-box {
-                margin-top: 30px;
+            .navbar-brand {
+                position: static !important;
+                transform: none !important;
+            }
+            .content {
+                padding: 1rem 1rem 5rem;
             }
         }
 
-        /* Mejorar el estilo de los cuadros */
+        /* Mejorar cards y filas */
         .row {
-            margin-top: 20px;
+            margin-top: 1.5rem;
         }
-
         .card {
-            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        .card:hover {
+            box-shadow: 0 8px 20px rgb(0 0 0 / 0.15);
         }
     </style>
 </head>
 <body>
 
-    <!-- Barra de navegación superior -->
-    <nav class="navbar navbar-expand-lg navbar-dark position-relative">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container position-relative">
-            <button class="btn btn-outline-light me-3" id="toggleSidebar">
-                ☰
-            </button>            
-            <!-- Marca centrada -->
+            <button id="toggleSidebar" aria-label="Toggle sidebar">☰</button>
             <a class="navbar-brand position-absolute start-50 translate-middle-x" href="{{ route('dashboard') }}">
                 DECOR CENTER
             </a>
@@ -180,31 +213,41 @@
         </div>
     </nav>
 
-
-    <!-- Contenedor principal -->
+    <!-- Sidebar y contenido -->
     <div class="container-fluid mt-4">
         <div class="row">
-            <!-- Si el usuario no está autenticado, muestra el cuadro de bienvenida -->
             @include('components.welcome-box')
 
-            <!-- Contenido de la página para usuarios logueados -->
             @auth
             <div class="sidebar" id="sidebar">
-                <h4 class="mt-5">Bienvenido, {{ Auth::user()->name }}</h4>
+                <h4>Bienvenido, {{ Auth::user()->name }}</h4>
+
                 <a href="{{ route('dashboard') }}">Panel de Control</a>
-                <a href="{{ route('productos.index') }}">Ver Productos</a>
-                <a href="{{ route('ventas.crear') }}" class="btn btn-primary">Nueva Venta</a>
-                @role('admin|editor')
-                <a href="{{ route('productos.create') }}">Agregar Producto</a>
-                <a href="{{ route('inventory.logs') }}">Historial de Inventario</a>
-                @endrole
+
+                @hasanyrole('admin|editor|vendedor')
+                    <a href="{{ route('productos.index') }}">Ver Productos</a>
+                @endhasanyrole
+
+                @hasanyrole('admin|vendedor')
+                    <a href="{{ route('ventas.crear') }}" class="btn btn-primary mt-3">Nueva Venta</a>
+                @endhasanyrole
+
+                @hasanyrole('admin|editor')
+                    <a href="{{ route('productos.create') }}">Agregar Producto</a>
+                    <a href="{{ route('inventory.logs') }}">Historial de Inventario</a>
+                @endhasanyrole
+
+                @hasanyrole('admin|vendedor')
+                <a href="{{ route('clientes.crear') }}" class="btn btn-secondary mt-3">Crear Cliente</a>
+                @endhasanyrole
+
                 @role('admin')
-                <a href="{{ route('clientes.crear') }}" class="btn btn-secondary mt-2">Crear Cliente</a>
+                    <a href="{{ route('admin.users.index') }}">Gestionar Usuarios</a>
                 @endrole
-                <!-- Desplegable de Reportes -->
-                <div class="mt-3">
+
+                <div class="mt-4">
                     @role('admin')
-                    <a class="d-block" data-bs-toggle="collapse" href="#submenuReportes" role="button" aria-expanded="false" aria-controls="submenuReportes">
+                    <a class="d-block fw-semibold text-warning" data-bs-toggle="collapse" href="#submenuReportes" role="button" aria-expanded="false" aria-controls="submenuReportes" style="cursor:pointer;">
                         📊 Reportes ▾
                     </a>
                     @endrole
@@ -213,7 +256,6 @@
                         <a href="{{ route('reportes.productos_mas_vendidos') }}" class="ms-3 d-block mt-2">🔥 Productos más vendidos</a>
                         <a href="{{ route('reportes.variacion_stock') }}" class="ms-3 d-block mt-2">⚠️ Variación de Stock</a>
                         <a href="{{ route('reportes.usuarios_registrados') }}" class="ms-3 d-block mt-2">👥 Usuarios Registrados</a>
-
                     </div>
                 </div>
             </div>
@@ -225,18 +267,17 @@
         </div>
     </div>
 
-    <!-- Pie de página -->
-    <div class="footer">
+    <!-- Footer -->
+    <footer class="footer">
         <p>&copy; 2025 DECOR CENTER. Todos los derechos reservados.</p>
-    </div>
+    </footer>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('toggleSidebar').addEventListener('click', function () {
+        document.getElementById('toggleSidebar').addEventListener('click', () => {
             document.body.classList.toggle('sidebar-visible');
         });
-    </script>       
-    
+    </script>
 </body>
 </html>

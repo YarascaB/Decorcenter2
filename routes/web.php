@@ -13,6 +13,8 @@ use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\Auth\GoogleController;
+use App\Http\Controllers\Admin\UserRoleController;
+
 
 // Ruta principal de la aplicación
 Route::get('/', function () {
@@ -80,6 +82,14 @@ Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.st
 Route::get('/auth/google', [GoogleController::class, 'redirect'])->name('auth.google');
 Route::get('/auth/google/callback', [GoogleController::class, 'callback']);
 
+Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('users', [UserRoleController::class, 'index'])->name('users.index');
+    Route::get('users/{user}/edit-role', [UserRoleController::class, 'editRole'])->name('users.editRole');
+    Route::put('users/{user}/update-role', [UserRoleController::class, 'updateRole'])->name('users.updateRole');
+    Route::post('users/{user}/assign-role', [UserRoleController::class, 'assignRole'])->name('users.assignRole');
+});
+
+Route::get('/api/productos-mas-vendidos', [ReporteController::class, 'apiProductosMasVendidos'])->name('api.productos-mas-vendidos');
 
 // Cargar las rutas de autenticación generadas por Breeze u otra configuración
 require __DIR__.'/auth.php';
