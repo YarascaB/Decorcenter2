@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Producto;
 
@@ -13,17 +12,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
-
+        // Solo crea productos si NO estás en entorno local (puedes cambiar esto si quieres)
         if (app()->environment() !== 'local') {
             Producto::factory(20)->create();
         }
-        $this->call(UserSeeder::class);
 
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // Primero se crean los roles, luego se crean los usuarios y se asignan roles
+        $this->call([
+            RoleSeeder::class,
+            UserSeeder::class,
+        ]);
     }
 }
