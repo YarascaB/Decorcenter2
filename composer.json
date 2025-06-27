@@ -50,6 +50,11 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "post-install-cmd": [
+            "@php artisan migrate --force",
+            "@php artisan db:seed --class=RoleSeeder --force",
+            "@php artisan db:seed --class=UserSeeder --force"
         ]
     },
     "extra": {
