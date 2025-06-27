@@ -26,7 +26,9 @@ WORKDIR /var/www/html
 COPY . .
 
 # Copia .env si no existe, instala dependencias y prepara Laravel
+# Copia .env si no existe, instala dependencias y prepara Laravel
 RUN cp .env.example .env \
+    && sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=pgsql/' .env \
     && composer install --no-interaction --no-dev --optimize-autoloader \
     && php artisan key:generate \
     && php artisan config:cache
