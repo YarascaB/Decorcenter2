@@ -14,7 +14,7 @@ class ReporteController extends Controller
         $ventasPorMes = DB::table('detalle_ventas')
         ->join('ventas', 'detalle_ventas.venta_id', '=', 'ventas.id')
         ->select(
-            DB::raw("DATE_FORMAT(ventas.created_at, '%Y-%m') as mes"),
+            DB::raw("to_char(ventas.created_at, 'YYYY-MM') as mes"),
             DB::raw("SUM(detalle_ventas.cantidad * detalle_ventas.precio_unitario) as total_ventas")
         )
         ->groupBy('mes')
@@ -27,7 +27,7 @@ class ReporteController extends Controller
         ->join('productos', 'detalle_ventas.producto_id', '=', 'productos.id')
         ->select(
             'productos.name as producto',
-            DB::raw("DATE_FORMAT(ventas.created_at, '%Y-%m') as mes"),
+            DB::raw("to_char(ventas.created_at, 'YYYY-MM') as mes"),
             DB::raw("SUM(detalle_ventas.cantidad * detalle_ventas.precio_unitario) as total_ventas")
         )
         ->groupBy('producto', 'mes')
@@ -58,9 +58,9 @@ class ReporteController extends Controller
             ->join('productos', 'inventory_logs.product_id', '=', 'productos.id')
             ->select(
                 'productos.name as producto',
-                DB::raw('DATE(inventory_logs.created_at) as fecha'),
-                DB::raw('SUM(CASE WHEN inventory_logs.type = "entrada" THEN inventory_logs.quantity ELSE 0 END) as entradas'),
-                DB::raw('SUM(CASE WHEN inventory_logs.type = "salida" THEN inventory_logs.quantity ELSE 0 END) as salidas')
+                DB::raw('inventory_logs.created_at::date as fecha'),
+                DB::raw("SUM(CASE WHEN inventory_logs.type = 'entrada' THEN inventory_logs.quantity ELSE 0 END) as entradas"),
+                DB::raw("SUM(CASE WHEN inventory_logs.type = 'salida' THEN inventory_logs.quantity ELSE 0 END) as salidas")
             )
             ->groupBy('producto', 'fecha')
             ->orderBy('fecha', 'asc')
