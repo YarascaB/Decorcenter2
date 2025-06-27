@@ -208,7 +208,7 @@
         }
 
         async function cargarDatos() {
-            const response = await fetch('{{ route('api.productos-mas-vendidos') }}');
+            const response = await fetch('/api/productos-mas-vendidos');
             const data = await response.json();
 
             const labels = data.map(p => p.name.toUpperCase());
