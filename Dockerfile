@@ -1,29 +1,45 @@
-# Usa imagen oficial PHP con Apache
+# Usa la imagen oficial de PHP con Apache
 FROM php:8.1-apache
 
-# Instala dependencias del sistema y extensiones PHP necesarias
+# Instala extensiones necesarias de sistema y PHP
 RUN apt-get update && apt-get install -y \
     libzip-dev zip unzip git curl libpq-dev libonig-dev libxml2-dev \
-    && docker-php-ext-install pdo_pgsql pdo_mysql zip mbstring xml \
+    libfreetype6-dev libjpeg-dev libpng-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install \
+        gd \
+        bcmath \
+        pdo_pgsql \
+        pdo_mysql \
+        zip \
+        mbstring \
+        xml \
     && a2enmod rewrite
 
-# Instala Composer (usa imagen oficial de Composer para copiar binario)
+# Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copia todo el proyecto al directorio raíz del servidor Apache
-COPY . /var/www/html/
+# Establece el directorio de trabajo en Apache
+WORKDIR /var/www/html
 
-# Cambia permisos para carpetas de almacenamiento y caché
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Copia todo el contenido del proyecto al contenedor
+COPY . .
 
-# Ejecuta Composer para instalar dependencias PHP (sin dev y optimizado)
-RUN composer install --no-dev --optimize-autoloader
+# Copia .env si no existe, instala dependencias y prepara Laravel
+RUN cp .env.example .env \
+    && composer install --no-interaction --no-dev --optimize-autoloader \
+    && php artisan key:generate \
+    && php artisan config:cache
 
-# Copia configuración Apache personalizada para Laravel
+# Asigna permisos necesarios para Laravel
+RUN chown -R www-data:www-data storage bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+# Copia la configuración personalizada de Apache (si tienes un archivo apache.conf)
 COPY ./apache.conf /etc/apache2/sites-available/000-default.conf
 
-# Expone el puerto 80 para HTTP
+# Expone el puerto HTTP por defecto
 EXPOSE 80
 
-# Comando para iniciar Apache en primer plano
+# Comando por defecto al iniciar el contenedor
 CMD ["apache2-foreground"]
