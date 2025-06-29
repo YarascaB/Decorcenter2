@@ -87,6 +87,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('users/{user}/edit-role', [UserRoleController::class, 'editRole'])->name('users.editRole');
     Route::put('users/{user}/update-role', [UserRoleController::class, 'updateRole'])->name('users.updateRole');
     Route::post('users/{user}/assign-role', [UserRoleController::class, 'assignRole'])->name('users.assignRole');
+    Route::delete('users/{user}', [UserRoleController::class, 'destroy'])->name('users.destroy');
 });
 
 Route::get('/api/productos-mas-vendidos', [ReporteController::class, 'apiProductosMasVendidos'])->name('api.productos-mas-vendidos');

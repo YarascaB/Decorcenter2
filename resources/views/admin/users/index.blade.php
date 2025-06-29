@@ -96,10 +96,18 @@
                                 {{ $usuario->roles->pluck('name')->first() ?? 'Sin rol' }}
                             </span>
                         </td>
-                        <td class="text-center">
+                        <td class="text-center d-flex gap-2 justify-content-center">
                             <a href="{{ route('admin.users.editRole', $usuario) }}" class="btn btn-sm btn-edit">
                                 ✏️ Editar rol
                             </a>
+                        
+                            <form action="{{ route('admin.users.destroy', $usuario) }}" method="POST" onsubmit="return confirm('¿Estás seguro de eliminar este usuario?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-sm btn-danger">
+                                    🗑️ Eliminar
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

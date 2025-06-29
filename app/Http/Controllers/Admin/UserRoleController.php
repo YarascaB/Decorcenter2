@@ -46,4 +46,21 @@ public function updateRole(Request $request, User $user)
     return redirect()->route('admin.users.index')->with('success', 'Rol actualizado correctamente.');
 }
 
+public function destroy(User $user)
+{
+    // Evita que el usuario se elimine a sí mismo
+    if ($user->id === auth()->id()) {
+        return back()->with('error', 'No puedes eliminar tu propio usuario.');
+    }
+
+    // Evita que se elimine a otro admin (opcional)
+    if ($user->hasRole('admin')) {
+        return back()->with('error', 'No puedes eliminar un usuario administrador.');
+    }
+
+    $user->delete();
+
+    return back()->with('success', 'Usuario eliminado correctamente.');
+}
+
 }
